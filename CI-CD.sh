@@ -27,19 +27,27 @@ ComprobarSiEsDistinto() {
 
   cd "$1" || exit 1
 
+  BRANCH=$(git symbolic-ref --short HEAD)
+
   git fetch origin
-
-  LOCAL=$(git rev-parse main)
-  REMOTE=$(git rev-parse origin/main)
-
-  if [ "$LOCAL" != "$REMOTE" ]; then
-    log "Cambios detectados en main remoto. Haciendo pull..."
-    git pull origin main
-
-    LanzarContenedor
+  
+  if git show-ref --verify --quiet "refs/remotes/origin/$BRANCH"; then
+  
+    LOCAL=$(git rev-parse "$BRANCH")
+    REMOTE=$(git rev-parse "origin/$BRANCH")
+  
+    if [ "$LOCAL" != "$REMOTE" ]; then
+      echo "Cambios detectados en $BRANCH. Haciendo pull..."
+      git pull origin "$BRANCH"
+      LanzarContenedor
+    else
+      echo "No hay cambios."
+    fi
+  
   else
-    echo "$(date): No hay cambios."
+    echo "La rama origin/$BRANCH no existe en remoto."
   fi
+
 }
 
 for REPO in "${REPO_DIR[@]}"; do
