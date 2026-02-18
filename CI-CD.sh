@@ -51,5 +51,5 @@ do
 
   ComprobarSiEsDistinto "$line"
 
-done < DIR_FILE
+done < "$DIR_FILE"
 
