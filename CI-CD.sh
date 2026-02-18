@@ -1,13 +1,9 @@
 #!/bin/bash
 set -e
 # Ruta de tu repositorio local
-REPO_DIR=(
-  "../BackEnd/"
-  "../Website/"
-  "."
-)
-LOG_FILE=(./Deploy.log)
 
+LOG_FILE=(./Deploy.log)
+DIR_FILE=(./direction_file.txt)
 log() {
   local mensaje="[$(date '+%Y-%m-%d %H:%M:%S')] $1"
   echo "$mensaje" | tee -a "$LOG_FILE"
@@ -50,7 +46,10 @@ ComprobarSiEsDistinto() {
 
 }
 
-for REPO in "${REPO_DIR[@]}"; do
-  ComprobarSiEsDistinto "$REPO"
+while IFS= read -r line
+do
 
-done
+  ComprobarSiEsDistinto "$line"
+
+done < DIR_FILE
+
