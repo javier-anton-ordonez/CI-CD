@@ -13,8 +13,7 @@ LanzarContenedor() {
   if docker network ls | grep -q "convcourse-network"; then
     docker network create convcourse-network
   fi
-  make build-prod
-  make start-prod
+  make prod-build
 
   log "Contenedor creado con el Makefile"
 }
